@@ -52,8 +52,20 @@ public class Registro1Activity extends AppCompatActivity {
         btnSiguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String nombre = nombreRegistro1.getText().toString();
+                String apellidos = apellidosRegistro1.getText().toString();
+                String ciudad = ciudadRegistro1.getText().toString();
+                String hospital = hospitalRegistro1.getText().toString();
+                String enfermedad = enfermedadRegistro1.getText().toString();
+                String descripcion = breveDescripcionRegistro1.getText().toString();
 
                 Intent pasarPantalla = new Intent(Registro1Activity.this, Registro2Activity.class);
+                pasarPantalla.putExtra("nombre", nombre);
+                pasarPantalla.putExtra("apellidos", apellidos);
+                pasarPantalla.putExtra("ciudad", ciudad);
+                pasarPantalla.putExtra("hospital", hospital);
+                pasarPantalla.putExtra("enfermedad", enfermedad);
+                pasarPantalla.putExtra("descripcion", descripcion);
                 finish();
                 startActivity(pasarPantalla);
 

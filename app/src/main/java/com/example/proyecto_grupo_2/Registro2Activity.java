@@ -57,15 +57,22 @@ public class Registro2Activity extends AppCompatActivity {
 
                 //AL PULSAR EL BOTON SE DEBE DE HACER LA INSERCIÓN EN LA BBDD Y SI ESTA HA SIDO CORRECTA PASAR A LA SIGUIENTE PANTALLA
 
-                final String nombre="Pablo";
-                final String apellidos="Diaz";
-                final String ciudad="Madrid";
-                final String hospital="Gregorio Marañón";
-                final String enfermedad="Sindrome E";
-                final String descripcion="Que tal";
+                Bundle datos = getIntent().getExtras();
+                final String nombre= datos.getString("nombre");
+                final String apellidos= datos.getString("apellidos");
+                final String ciudad= datos.getString("ciudad");
+                final String hospital= datos.getString("hospital");
+                final String enfermedad= datos.getString("enfermedad");
+                final String descripcion= datos.getString("descripcion");
                 final String email=emailRegistro2.getText().toString();
                 final String telefono=tlfRegistro2.getText().toString();
-                final String pw=confirmarPWRegistro2.getText().toString();
+                final String pw= passwordRegistro2.getText().toString();
+                final String pwConfirm=confirmarPWRegistro2.getText().toString();
+
+                if (!pw.equals(pwConfirm)){
+                    Toast.makeText(Registro2Activity.this, getString(R.string.toastErrorCoincidirContrasenyas), Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Response.Listener<String> respListener = new Response.Listener<String>() {
                     @Override
