@@ -25,13 +25,17 @@ import java.util.Objects;
 public class UserMainActivity extends AppCompatActivity {
 
     private ActivityUserMainBinding bind;
-
     protected TextView nombreUser;
     //protected TextView apellidosUser;
-    protected Bundle extras;    //"ARRAY" DE PAQUETES
-
+    protected Bundle extras;
     protected String nombre="";
-    //protected String apellidos="";
+    protected String apellidos="";
+    protected String ciudad="";
+    protected String hospital="";
+    protected String enfermedad="";
+    protected String descripcion="";
+    protected String email="";
+    protected String telefono="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class UserMainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         bind = ActivityUserMainBinding.inflate(getLayoutInflater());
         setContentView(bind.getRoot());
-        //setContentView(R.layout.activity_user_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_content_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -56,48 +60,48 @@ public class UserMainActivity extends AppCompatActivity {
                 Fragment fragment = null;
 
                 int itemID = menuItem.getItemId();
+
                 if (itemID == R.id.nav_home){
-                    //Toast.makeText(getApplicationContext(),"Menú inicio", Toast.LENGTH_LONG).show();
-                    //fragmentTransaction = true;
+
                     Intent intent = new Intent(UserMainActivity.this, MiPerfilActivity.class);
+
+                    intent.putExtra("nombre", nombre);
+                    intent.putExtra("apellidos", apellidos);
+                    intent.putExtra("ciudad", ciudad);
+                    intent.putExtra("hospital", hospital);
+                    intent.putExtra("enfermedad", enfermedad);
+                    intent.putExtra("descripcion", descripcion);
+                    intent.putExtra("email", email);
+                    intent.putExtra("telefono", telefono);
+
                     startActivity(intent);
-                }else if (itemID == R.id.nav_fetch){
-                    //Toast.makeText(getApplicationContext(),"Menú Buscar", Toast.LENGTH_LONG).show();
-                    //fragmentTransaction = true;
+
+                } else if (itemID == R.id.nav_fetch){
                     Intent intent = new Intent(UserMainActivity.this, BuscarActivity.class);
                     startActivity(intent);
-                }else if (itemID == R.id.nav_contacts){
-                    //Toast.makeText(getApplicationContext(),"Menú Contactos", Toast.LENGTH_LONG).show();
-                    //fragmentTransaction = true;
+
+                } else if (itemID == R.id.nav_contacts){
                     Intent intent = new Intent(UserMainActivity.this, ContactosActivity.class);
                     startActivity(intent);
-                }else if (itemID == R.id.nav_share){
-                    //Toast.makeText(getApplicationContext(),"Menú Sobre nosotros", Toast.LENGTH_LONG).show();
-                    //fragmentTransaction = true;
+
+                } else if (itemID == R.id.nav_share){
                     Intent intent = new Intent(UserMainActivity.this, SobreNosotrosActivity.class);
                     startActivity(intent);
-                }else if (itemID == R.id.nav_web) {
-                    //Toast.makeText(getApplicationContext(), "Menú Guia Usuario", Toast.LENGTH_LONG).show();
-                    //fragmentTransaction = true;
+
+                } else if (itemID == R.id.nav_web) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("https://acompaname.gitbook.io/acompaname-manual-de-usuario"));
                     startActivity(intent);
 
-                }else if (itemID == R.id.nav_close) {
-                    //Toast.makeText(getApplicationContext(), "Cerrar Sesión", Toast.LENGTH_LONG).show();
-                    //fragmentTransaction = true;
+                } else if (itemID == R.id.nav_close) {
                     Intent intent = new Intent(UserMainActivity.this, LoginActivity.class);
                     startActivity(intent);
-
                 }
 
-                //RECORRE EL STACK DEL FRAGMENT MANAGER Y LOS VA ELIMINANDO PARA LIBERAR LA MEMORIA
                 if (fragmentTransaction){
 
                     for (int i=0;i<getSupportFragmentManager().getBackStackEntryCount();i++){
-
                         getSupportFragmentManager().popBackStack();
-
                     }
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.content_fragment,fragment).commit();
@@ -118,31 +122,35 @@ public class UserMainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
 
                 int entries = getSupportFragmentManager().getBackStackEntryCount();
-                if (entries>0) {
+
+                if (entries > 0) {
                     getSupportFragmentManager().popBackStack();
-                }else if (entries == 0 && bind.main.isDrawerOpen(GravityCompat.START)){
+                } else if (entries == 0 && bind.main.isDrawerOpen(GravityCompat.START)) {
                     bind.main.closeDrawers();
-                }else if (entries == 0){
+                } else {
                     bind.main.openDrawer(GravityCompat.START);
                 }
-
             }
         };
 
         nombreUser = (TextView) findViewById(R.id.textViewNombre_userMain);
-        //apellidosUser = (TextView) findViewById(R.id.textViewApellidos_userMain);
 
         extras = getIntent().getExtras();
 
-        assert extras != null;
-        nombre = extras.getString("nombre");
-        //apellidos = extras.getString("apellidos");
+        if (extras != null) {
+            nombre = extras.getString("nombre", "");
+            apellidos = extras.getString("apellidos", "");
+            ciudad = extras.getString("ciudad", "");
+            hospital = extras.getString("hospital", "");
+            enfermedad = extras.getString("enfermedad", "");
+            descripcion = extras.getString("descripcion", "");
+            email = extras.getString("email", "");
+            telefono = extras.getString("telefono", "");
+        }
 
         nombreUser.setText(getString(R.string.bienvenida, nombre));
-        //apellidosUser.setText(apellidos);
 
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
-
     }
 
     @Override
@@ -160,14 +168,13 @@ public class UserMainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //ESTO SE USA PARA INICIAR EL MENU LATERAL DE LA PANTALLA PRINCIPAL DEL USUARIO
     private void init(){
         setToolbar();
     }
+
     private void setToolbar(){
         Toolbar toolbar = findViewById(R.id.toolbar);
-         setSupportActionBar(toolbar);
-         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
-
 }
